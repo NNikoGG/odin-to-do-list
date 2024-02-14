@@ -39,7 +39,7 @@ main{
     display: flex;
     flex-direction: column;
     padding: 4px 20px;
-    width: 300px;
+    width: 400px;
     background-color: var(--lightgrey);
 }
 
@@ -69,3 +69,33 @@ main{
     margin-right: 10px;
 }
 
+.right-panel{
+    display: flex;
+    flex-direction: column;
+    padding: 4px 20px;
+    margin-left: 50px;
+    margin-right: 50px;
+    width: 100%;
+}
+
+.right-panel > h2{
+    font-size: 28px;
+    margin-top: 20px;
+}
+
+.right-panel > button{
+    border: none;
+    background-color: var(--white);
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    cursor: pointer;
+    padding: 4px 24px;
+    margin-bottom: 2px;
+    width: 100%;
+}
+
+.right-panel > button:hover{
+    background-color: var(--grey);
+}
