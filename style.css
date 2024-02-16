@@ -168,3 +168,18 @@ main{
     font-weight: 600;
     cursor: pointer;
 }
+
+.task{
+    font-size: 20px;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    margin: 14px 4px;
+}
+
+.task > button {
+    width: 30px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: var(--red);
+}
