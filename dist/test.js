@@ -15,8 +15,10 @@ class Task {
 function render(){
   let taskList = document.querySelector(".task-container");
   taskList.innerHTML = '';
-  for (let i = 0; i < myTasks.length; i++){
-      let task = myTasks[i];
+  // Sort tasks by date using native JavaScript Date parsing
+  const sortedTasks = myTasks.sort((a, b) => new Date(a.date) - new Date(b.date));
+  for (let i = 0; i < sortedTasks.length; i++){
+      let task = sortedTasks[i];
       let taskWrapper = document.createElement('div');
       taskWrapper.className = "task";
       taskList.appendChild(taskWrapper);
