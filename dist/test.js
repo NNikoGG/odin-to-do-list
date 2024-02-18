@@ -43,6 +43,87 @@ function render(){
   }
 }
 
+let allTasksButton = document.querySelector('#all-tasks-button');
+allTasksButton.addEventListener('click', render);
+
+let todayButton = document.querySelector('#today-button');
+todayButton.addEventListener('click', renderTodayTasks);
+
+function renderTodayTasks() {
+  let taskList = document.querySelector(".task-container");
+  taskList.innerHTML = '';
+
+  const today = new Date().toISOString().slice(0, 10); // Get today's date in YYYY-MM-DD format
+
+  const todayTasks = myTasks.filter(task => task.date === today);
+
+  for (let i = 0; i < todayTasks.length; i++) {
+    let task = todayTasks[i];
+    let taskWrapper = document.createElement('div');
+    taskWrapper.className = "task";
+    taskList.appendChild(taskWrapper);
+    let taskName = document.createElement('p');
+    taskName.innerText = task.title;
+    let taskDescription = document.createElement('p');
+    taskDescription.innerText = task.description;
+    let taskDate = document.createElement('p');
+    taskDate.innerText = task.date;
+    let taskPriority = document.createElement('p');
+    taskPriority.innerText = task.priority;
+    let removeButton = document.createElement('button');
+    removeButton.innerText = "X";
+    removeButton.className = "remove-button";
+    removeButton.dataset.index = i;
+
+    taskWrapper.appendChild(taskName);
+    taskWrapper.appendChild(taskDescription);
+    taskWrapper.appendChild(taskDate);
+    taskWrapper.appendChild(taskPriority);
+    taskWrapper.appendChild(removeButton);
+  }
+}
+
+let thisWeekButton = document.querySelector('#this-week-button');
+thisWeekButton.addEventListener('click', renderThisWeekTasks);
+
+function renderThisWeekTasks() {
+  let taskList = document.querySelector(".task-container");
+  taskList.innerHTML = '';
+
+  const today = new Date();
+  const sevenDaysFromNow = new Date();
+  sevenDaysFromNow.setDate(today.getDate() + 7);
+
+  const thisWeekTasks = myTasks.filter(task => {
+    const taskDate = new Date(task.date);
+    return taskDate >= today && taskDate <= sevenDaysFromNow;
+  });
+
+  for (let i = 0; i < thisWeekTasks.length; i++) {
+    let task = thisWeekTasks[i];
+    let taskWrapper = document.createElement('div');
+    taskWrapper.className = "task";
+    taskList.appendChild(taskWrapper);
+    let taskName = document.createElement('p');
+    taskName.innerText = task.title;
+    let taskDescription = document.createElement('p');
+    taskDescription.innerText = task.description;
+    let taskDate = document.createElement('p');
+    taskDate.innerText = task.date;
+    let taskPriority = document.createElement('p');
+    taskPriority.innerText = task.priority;
+    let removeButton = document.createElement('button');
+    removeButton.innerText = "X";
+    removeButton.className = "remove-button";
+    removeButton.dataset.index = i;
+
+    taskWrapper.appendChild(taskName);
+    taskWrapper.appendChild(taskDescription);
+    taskWrapper.appendChild(taskDate);
+    taskWrapper.appendChild(taskPriority);
+    taskWrapper.appendChild(removeButton);
+  }
+}
 
 function addTasksToMyTasks(title, description, date, priority) {
     let newTask = new Task(title, description, date, priority);
