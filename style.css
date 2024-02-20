@@ -174,10 +174,21 @@ main{
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     margin: 14px 4px;
+    place-content: center;
+}
+
+.task > p{
+    display: flex;
+    justify-content: center;
+    margin: 12px;
+    max-width: 200px;
+    max-height: 200px;
 }
 
 .task > button {
+    margin: 12px;
     width: 30px;
+    height: 30px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
