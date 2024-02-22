@@ -175,6 +175,11 @@ main{
     grid-template-columns: repeat(5, 1fr);
     margin: 14px 4px;
     place-content: center;
+    cursor: pointer;
+}
+
+.task:hover{
+    background-color: var(--grey);
 }
 
 .task > p{
