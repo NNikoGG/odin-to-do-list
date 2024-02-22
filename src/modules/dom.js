@@ -1,6 +1,7 @@
 import { myTasks } from './tasks.js';
 
-function render(tasks = myTasks) {
+
+function render(tasks = myTasks, formDialog, taskForm) {
     let taskList = document.querySelector(".task-container");
     taskList.innerHTML = '';
     // Sort tasks by date using native JavaScript Date parsing
@@ -9,6 +10,7 @@ function render(tasks = myTasks) {
         let task = sortedTasks[i];
         let taskWrapper = document.createElement('div');
         taskWrapper.className = "task";
+        taskWrapper.dataset.index = i;
         taskList.appendChild(taskWrapper);
         let taskName = document.createElement('p');
         taskName.innerText = task.title;
@@ -22,12 +24,24 @@ function render(tasks = myTasks) {
         removeButton.innerText = "X";
         removeButton.className = "remove-button";
         removeButton.dataset.index = i;
-  
         taskWrapper.appendChild(taskName);
         taskWrapper.appendChild(taskDescription);
         taskWrapper.appendChild(taskDate);
         taskWrapper.appendChild(taskPriority);
         taskWrapper.appendChild(removeButton);
+        // In the render function in dom.js
+        taskWrapper.addEventListener('click', function() {
+          const index = this.dataset.index;
+          const task = myTasks[index];
+          document.querySelector('#title').value = task.title;
+          document.querySelector('#description').value = task.description;
+          document.querySelector('#date').value = task.date;
+          document.querySelector('#priority-select').value = task.priority;
+          formDialog.showModal();
+
+          // Store the index of the task being edited in the form
+          taskForm.dataset.editingIndex = index;
+        });
     }
 }
 

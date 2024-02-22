@@ -22,4 +22,12 @@ function removeTask(index) {
   return myTasks;
 }
 
-export { addTask, removeTask, myTasks };
+function updateTask(index, title, description, date, priority) {
+  const task = myTasks[index];
+  task.title = title;
+  task.description = description;
+  task.date = date;
+  task.priority = priority;
+}
+
+export { addTask, removeTask, updateTask, myTasks };

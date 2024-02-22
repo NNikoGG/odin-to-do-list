@@ -1,4 +1,4 @@
-import { addTask, removeTask } from './tasks.js';
+import { addTask, removeTask, updateTask, myTasks } from './tasks.js';
 import { render, renderTodayTasks, renderThisWeekTasks } from './dom.js';
 
 const events = () => {
@@ -9,17 +9,25 @@ const events = () => {
         const allTasksButton = document.querySelector('#all-tasks-button');
         const todayButton = document.querySelector('#today-button');
         const thisWeekButton = document.querySelector('#this-week-button');
-    
+        
         taskForm.addEventListener('submit', function(event) {
             event.preventDefault();
             const title = document.querySelector('#title').value;
             const description = document.querySelector('#description').value;
             const date = document.querySelector('#date').value;
             const priority = document.querySelector('#priority-select').value;
-            addTask(title, description, date, priority);
-            render();
+            if (taskForm.dataset.editingIndex !== undefined) {
+                const index = taskForm.dataset.editingIndex;
+                updateTask(index, title, description, date, priority);
+                delete taskForm.dataset.editingIndex; // Clear the editing index
+            } else {
+                addTask(title, description, date, priority);
+            }
+        
+            render(myTasks, formDialog, taskForm);
             taskForm.reset();
             formDialog.close();
+            delete taskForm.dataset.editingIndex;
         });
     
         addTaskButton.addEventListener('click', () => {
@@ -38,9 +46,9 @@ const events = () => {
             }
         });
     
-        allTasksButton.addEventListener('click', render);
-        todayButton.addEventListener('click', renderTodayTasks);
-        thisWeekButton.addEventListener('click', renderThisWeekTasks);
+        allTasksButton.addEventListener('click', render(myTasks, formDialog, taskForm));
+        todayButton.addEventListener('click', renderTodayTasks(myTasks, formDialog, taskForm));
+        thisWeekButton.addEventListener('click', renderThisWeekTasks(myTasks, formDialog, taskForm));
     
         document.addEventListener('click', function(event) {
             if (event.target && event.target.className == 'remove-button') {
