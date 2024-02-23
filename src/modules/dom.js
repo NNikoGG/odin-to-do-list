@@ -23,6 +23,7 @@ function render(tasks = myTasks, formDialog, taskForm) {
         taskList.appendChild(taskWrapper);
 
         let toggleButton = document.createElement('i');
+        toggleButton.id = `toggle-button-${i}`;
         toggleButton.className = task.completed ? "fa-solid fa-circle-check" : "fa-regular fa-circle";
         toggleButton.dataset.index = i;
         toggleButton.addEventListener('click', function(event) {
@@ -31,24 +32,33 @@ function render(tasks = myTasks, formDialog, taskForm) {
           toggleTaskCompletion(index);
           render(tasks, formDialog, taskForm); // Re-render the tasks
         });      
-
         let taskName = document.createElement('p');
+        taskName.id = 'task-title';
         taskName.innerText = task.title;
         let taskDescription = document.createElement('p');
+        taskDescription.id = 'task-description';
         taskDescription.innerText = task.description;
         let taskDate = document.createElement('p');
+        taskDate.id = 'task-date';
         taskDate.innerText = task.date;
         let taskPriority = document.createElement('p');
+        taskPriority.id = 'task-priority';
         taskPriority.innerText = task.priority;
-        let removeButton = document.createElement('button');
-        removeButton.innerText = "X";
-        removeButton.className = "remove-button";
+        let editButton = document.createElement('i');
+        editButton.id = `edit-button-${i}`;
+        editButton.className = "fa-solid fa-pen-to-square";
+        editButton.dataset.index = i;
+        let removeButton = document.createElement('i');
+        removeButton.id = `remove-button-${i}`;
+        removeButton.className = "fa-solid fa-circle-xmark";
         removeButton.dataset.index = i;
+
         taskWrapper.insertBefore(toggleButton, taskWrapper.firstChild);
         taskWrapper.appendChild(taskName);
         taskWrapper.appendChild(taskDescription);
         taskWrapper.appendChild(taskDate);
         taskWrapper.appendChild(taskPriority);
+        taskWrapper.appendChild(editButton);
         taskWrapper.appendChild(removeButton);
 
         // In the render function in dom.js

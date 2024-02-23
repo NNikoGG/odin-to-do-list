@@ -53,13 +53,13 @@ const events = () => {
         
     
         document.addEventListener('click', function(event) {
-            if (event.target && event.target.className == 'remove-button') {
+            if (event.target && event.target.id.startsWith('remove-button-')) {
                 const index = event.target.dataset.index;
                 removeTask(index);
                 render();
             }
         });
-
+        
         completedTasksButton.addEventListener('click', () => {
             const completedTasks = myTasks.filter(task => task.completed);
             render(completedTasks, formDialog, taskForm);
@@ -70,7 +70,3 @@ const events = () => {
 }
 
 export default events;
-
-
-
-
