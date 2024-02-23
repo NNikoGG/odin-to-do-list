@@ -9,6 +9,7 @@ const events = () => {
         const allTasksButton = document.querySelector('#all-tasks-button');
         const todayButton = document.querySelector('#today-button');
         const thisWeekButton = document.querySelector('#this-week-button');
+        const completedButton = document.querySelector('#completed-button');
         
         taskForm.addEventListener('submit', function(event) {
             event.preventDefault();
@@ -46,9 +47,10 @@ const events = () => {
             }
         });
     
-        allTasksButton.addEventListener('click', render(myTasks, formDialog, taskForm));
-        todayButton.addEventListener('click', renderTodayTasks(myTasks, formDialog, taskForm));
-        thisWeekButton.addEventListener('click', renderThisWeekTasks(myTasks, formDialog, taskForm));
+        allTasksButton.addEventListener('click', () => render(myTasks, formDialog, taskForm));
+        todayButton.addEventListener('click', () => renderTodayTasks(myTasks, formDialog, taskForm));
+        thisWeekButton.addEventListener('click', () => renderThisWeekTasks(myTasks, formDialog, taskForm));
+        
     
         document.addEventListener('click', function(event) {
             if (event.target && event.target.className == 'remove-button') {
@@ -57,7 +59,6 @@ const events = () => {
                 render();
             }
         });
-    
         render(); // Initial render
     });
 }

@@ -12,6 +12,8 @@ function render(tasks = myTasks, formDialog, taskForm) {
         taskWrapper.className = "task";
         taskWrapper.dataset.index = i;
         taskList.appendChild(taskWrapper);
+        let toggleButton = document.createElement('i');
+        toggleButton.className = "fa-regular fa-circle";
         let taskName = document.createElement('p');
         taskName.innerText = task.title;
         let taskDescription = document.createElement('p');
@@ -24,6 +26,7 @@ function render(tasks = myTasks, formDialog, taskForm) {
         removeButton.innerText = "X";
         removeButton.className = "remove-button";
         removeButton.dataset.index = i;
+        taskWrapper.appendChild(toggleButton);
         taskWrapper.appendChild(taskName);
         taskWrapper.appendChild(taskDescription);
         taskWrapper.appendChild(taskDate);
@@ -58,6 +61,9 @@ function renderTodayTasks() {
       let taskWrapper = document.createElement('div');
       taskWrapper.className = "task";
       taskList.appendChild(taskWrapper);
+      let toggleButton = document.createElement('i');
+      toggleButton.className = "fa-regular fa-circle";
+      taskWrapper.appendChild(toggleButton);
       let taskName = document.createElement('p');
       taskName.innerText = task.title;
       let taskDescription = document.createElement('p');
@@ -97,6 +103,9 @@ function renderThisWeekTasks() {
       let taskWrapper = document.createElement('div');
       taskWrapper.className = "task";
       taskList.appendChild(taskWrapper);
+      let toggleButton = document.createElement('i');
+      toggleButton.className = "fa-regular fa-circle";
+      taskWrapper.appendChild(toggleButton);
       let taskName = document.createElement('p');
       taskName.innerText = task.title;
       let taskDescription = document.createElement('p');
