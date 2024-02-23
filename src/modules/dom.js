@@ -1,19 +1,37 @@
-import { myTasks } from './tasks.js';
+import { myTasks, toggleTaskCompletion } from './tasks.js';
 
 
 function render(tasks = myTasks, formDialog, taskForm) {
     let taskList = document.querySelector(".task-container");
     taskList.innerHTML = '';
+    
     // Sort tasks by date using native JavaScript Date parsing
-    const sortedTasks = myTasks.sort((a, b) => new Date(a.date) - new Date(b.date));
+    const sortedTasks = tasks.sort((a, b) => new Date(a.date) - new Date(b.date));
     for (let i = 0; i < sortedTasks.length; i++){
         let task = sortedTasks[i];
         let taskWrapper = document.createElement('div');
         taskWrapper.className = "task";
         taskWrapper.dataset.index = i;
+
+        // Check if the task is completed and add the 'completed' class accordingly
+        if (task.completed) {
+          taskWrapper.classList.add('completed');
+        } else {
+          taskWrapper.classList.remove('completed');
+        }        
+
         taskList.appendChild(taskWrapper);
+
         let toggleButton = document.createElement('i');
-        toggleButton.className = "fa-regular fa-circle";
+        toggleButton.className = task.completed ? "fa-solid fa-circle-check" : "fa-regular fa-circle";
+        toggleButton.dataset.index = i;
+        toggleButton.addEventListener('click', function(event) {
+          event.stopPropagation(); // Prevent the event from bubbling up to the taskWrapper
+          const index = this.dataset.index;
+          toggleTaskCompletion(index);
+          render(tasks, formDialog, taskForm); // Re-render the tasks
+        });      
+
         let taskName = document.createElement('p');
         taskName.innerText = task.title;
         let taskDescription = document.createElement('p');
@@ -26,12 +44,13 @@ function render(tasks = myTasks, formDialog, taskForm) {
         removeButton.innerText = "X";
         removeButton.className = "remove-button";
         removeButton.dataset.index = i;
-        taskWrapper.appendChild(toggleButton);
+        taskWrapper.insertBefore(toggleButton, taskWrapper.firstChild);
         taskWrapper.appendChild(taskName);
         taskWrapper.appendChild(taskDescription);
         taskWrapper.appendChild(taskDate);
         taskWrapper.appendChild(taskPriority);
         taskWrapper.appendChild(removeButton);
+
         // In the render function in dom.js
         taskWrapper.addEventListener('click', function() {
           const index = this.dataset.index;
@@ -51,11 +70,8 @@ function render(tasks = myTasks, formDialog, taskForm) {
 function renderTodayTasks() {
     let taskList = document.querySelector(".task-container");
     taskList.innerHTML = '';
-  
     const today = new Date().toISOString().slice(0, 10); // Get today's date in YYYY-MM-DD format
-  
     const todayTasks = myTasks.filter(task => task.date === today);
-  
     for (let i = 0; i < todayTasks.length; i++) {
       let task = todayTasks[i];
       let taskWrapper = document.createElement('div');
@@ -88,16 +104,14 @@ function renderTodayTasks() {
 function renderThisWeekTasks() {
     let taskList = document.querySelector(".task-container");
     taskList.innerHTML = '';
-  
     const today = new Date();
     const sevenDaysFromNow = new Date();
-    sevenDaysFromNow.setDate(today.getDate() + 7);
-  
+    sevenDaysFromNow.setDate(today.getDate() + 7); 
     const thisWeekTasks = myTasks.filter(task => {
       const taskDate = new Date(task.date);
       return taskDate >= today && taskDate <= sevenDaysFromNow;
     });
-  
+
     for (let i = 0; i < thisWeekTasks.length; i++) {
       let task = thisWeekTasks[i];
       let taskWrapper = document.createElement('div');
@@ -118,7 +132,6 @@ function renderThisWeekTasks() {
       removeButton.innerText = "X";
       removeButton.className = "remove-button";
       removeButton.dataset.index = i;
-  
       taskWrapper.appendChild(taskName);
       taskWrapper.appendChild(taskDescription);
       taskWrapper.appendChild(taskDate);
@@ -126,5 +139,6 @@ function renderThisWeekTasks() {
       taskWrapper.appendChild(removeButton);
     }
 }
+
 
 export { render, renderTodayTasks, renderThisWeekTasks };

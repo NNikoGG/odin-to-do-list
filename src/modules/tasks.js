@@ -5,6 +5,7 @@ class Task {
     this.description = description;
     this.date = date;
     this.priority = priority;
+    this.completed = false;
   }
 }
 
@@ -30,4 +31,10 @@ function updateTask(index, title, description, date, priority) {
   task.priority = priority;
 }
 
-export { addTask, removeTask, updateTask, myTasks };
+function toggleTaskCompletion(index) {
+  const task = myTasks[index];
+  task.completed = !task.completed;
+}
+
+export { addTask, removeTask, updateTask, toggleTaskCompletion, myTasks };
+

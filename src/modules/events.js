@@ -9,8 +9,8 @@ const events = () => {
         const allTasksButton = document.querySelector('#all-tasks-button');
         const todayButton = document.querySelector('#today-button');
         const thisWeekButton = document.querySelector('#this-week-button');
-        const completedButton = document.querySelector('#completed-button');
-        
+        const completedTasksButton = document.querySelector('#completed-button');
+
         taskForm.addEventListener('submit', function(event) {
             event.preventDefault();
             const title = document.querySelector('#title').value;
@@ -59,6 +59,12 @@ const events = () => {
                 render();
             }
         });
+
+        completedTasksButton.addEventListener('click', () => {
+            const completedTasks = myTasks.filter(task => task.completed);
+            render(completedTasks, formDialog, taskForm);
+        });
+
         render(); // Initial render
     });
 }
