@@ -84,7 +84,7 @@ main{
     margin-top: 20px;
 }
 
-.right-panel > button{
+#add-task-button{
     border: none;
     background-color: var(--white);
     font-size: 20px;
@@ -97,7 +97,7 @@ main{
     width: 100%;
 }
 
-.right-panel > button:hover{
+#add-task-button:hover{
     background-color: var(--grey);
 }
 

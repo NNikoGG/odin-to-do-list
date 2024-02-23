@@ -77,77 +77,25 @@ function render(tasks = myTasks, formDialog, taskForm) {
     }
 }
 
-function renderTodayTasks() {
-    let taskList = document.querySelector(".task-container");
-    taskList.innerHTML = '';
-    const today = new Date().toISOString().slice(0, 10); // Get today's date in YYYY-MM-DD format
-    const todayTasks = myTasks.filter(task => task.date === today);
-    for (let i = 0; i < todayTasks.length; i++) {
-      let task = todayTasks[i];
-      let taskWrapper = document.createElement('div');
-      taskWrapper.className = "task";
-      taskList.appendChild(taskWrapper);
-      let toggleButton = document.createElement('i');
-      toggleButton.className = "fa-regular fa-circle";
-      taskWrapper.appendChild(toggleButton);
-      let taskName = document.createElement('p');
-      taskName.innerText = task.title;
-      let taskDescription = document.createElement('p');
-      taskDescription.innerText = task.description;
-      let taskDate = document.createElement('p');
-      taskDate.innerText = task.date;
-      let taskPriority = document.createElement('p');
-      taskPriority.innerText = task.priority;
-      let removeButton = document.createElement('button');
-      removeButton.innerText = "X";
-      removeButton.className = "remove-button";
-      removeButton.dataset.index = i;
-  
-      taskWrapper.appendChild(taskName);
-      taskWrapper.appendChild(taskDescription);
-      taskWrapper.appendChild(taskDate);
-      taskWrapper.appendChild(taskPriority);
-      taskWrapper.appendChild(removeButton);
-    }
+function renderTodayTasks(tasks = myTasks, formDialog, taskForm) {
+  let taskList = document.querySelector(".task-container");
+  taskList.innerHTML = '';
+  const today = new Date().toISOString().slice(0, 10); // Get today's date in YYYY-MM-DD format
+  const todayTasks = tasks.filter(task => task.date === today);
+  render(todayTasks, formDialog, taskForm); // Use the main render function to render today's tasks
 }
 
-function renderThisWeekTasks() {
-    let taskList = document.querySelector(".task-container");
-    taskList.innerHTML = '';
-    const today = new Date();
-    const sevenDaysFromNow = new Date();
-    sevenDaysFromNow.setDate(today.getDate() + 7); 
-    const thisWeekTasks = myTasks.filter(task => {
+function renderThisWeekTasks(tasks = myTasks, formDialog, taskForm) {
+  let taskList = document.querySelector(".task-container");
+  taskList.innerHTML = '';
+  const today = new Date();
+  const sevenDaysFromNow = new Date();
+  sevenDaysFromNow.setDate(today.getDate() + 7);
+  const thisWeekTasks = tasks.filter(task => {
       const taskDate = new Date(task.date);
       return taskDate >= today && taskDate <= sevenDaysFromNow;
-    });
-
-    for (let i = 0; i < thisWeekTasks.length; i++) {
-      let task = thisWeekTasks[i];
-      let taskWrapper = document.createElement('div');
-      taskWrapper.className = "task";
-      taskList.appendChild(taskWrapper);
-      let toggleButton = document.createElement('i');
-      toggleButton.className = "fa-regular fa-circle";
-      taskWrapper.appendChild(toggleButton);
-      let taskName = document.createElement('p');
-      taskName.innerText = task.title;
-      let taskDescription = document.createElement('p');
-      taskDescription.innerText = task.description;
-      let taskDate = document.createElement('p');
-      taskDate.innerText = task.date;
-      let taskPriority = document.createElement('p');
-      taskPriority.innerText = task.priority;
-      let removeButton = document.createElement('button');
-      removeButton.innerText = "X";
-      removeButton.className = "remove-button";
-      removeButton.dataset.index = i;
-      taskWrapper.appendChild(taskName);
-      taskWrapper.appendChild(taskDescription);
-      taskWrapper.appendChild(taskDate);
-      taskWrapper.appendChild(taskPriority);
-      taskWrapper.appendChild(removeButton);
-    }
+  });
+  render(thisWeekTasks, formDialog, taskForm); // Use the main render function to render this week's tasks
 }
 
 

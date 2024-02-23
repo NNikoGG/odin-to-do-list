@@ -50,7 +50,6 @@ const events = () => {
         allTasksButton.addEventListener('click', () => render(myTasks, formDialog, taskForm));
         todayButton.addEventListener('click', () => renderTodayTasks(myTasks, formDialog, taskForm));
         thisWeekButton.addEventListener('click', () => renderThisWeekTasks(myTasks, formDialog, taskForm));
-        
     
         document.addEventListener('click', function(event) {
             if (event.target && event.target.id.startsWith('remove-button-')) {
