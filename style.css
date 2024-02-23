@@ -172,14 +172,12 @@ main{
 .task{
     font-size: 20px;
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    margin: 14px 4px;
+    grid-template-columns: repeat(6, 1fr);
     place-content: center;
+    place-items: center;
+    margin: 14px 4px;
     cursor: pointer;
-}
-
-.task:hover{
-    background-color: var(--grey);
+    padding: 4px 20px;
 }
 
 .task > p{
