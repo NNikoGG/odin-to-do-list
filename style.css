@@ -49,7 +49,7 @@ main{
     margin-top: 20px;
 }
 
-.left-panel > button{
+.left-panel button{
     border: none;
     background-color: var(--lightgrey);
     font-size: 20px;
@@ -62,7 +62,7 @@ main{
     width: 100%;
 }
 
-.left-panel > button:hover{
+.left-panel button:hover{
     background-color: var(--grey);
 }
 
@@ -124,12 +124,29 @@ main{
     font-weight: 600;
 }
 
+#project-dialog{
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 520px;
+    height: 200px;
+    border: none;
+    border-radius: 12px;
+    background-color: var(--lightgrey);
+    overflow: hidden;
+    padding: 40px;
+}
+
+#project-dialog::backdrop{
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
 #form-dialog{
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 500px;
-    height: 500px;
+    width: 520px;
+    height: 520px;
     border: none;
     border-radius: 12px;
     background-color: var(--lightgrey);
@@ -144,11 +161,26 @@ main{
 #task-form{
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    padding: 40px;
+    padding: 20px 40px;
     gap: 20px;
 }
 
 #task-form > input:not(#submit-button), #task-form > textarea, #task-form > select {
+    border: none;
+    border-bottom: 1px solid black;
+    background-color: var(--lightgrey);
+    resize: none;
+    padding: 4px 4px;
+}
+
+#project-form{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    padding: 20px 40px;
+    gap: 20px;
+}
+
+#project-form > input:not(#submit-button), #project-form > textarea, #project-form > select {
     border: none;
     border-bottom: 1px solid black;
     background-color: var(--lightgrey);
@@ -167,6 +199,7 @@ main{
     color: var(--black);
     font-weight: 600;
     cursor: pointer;
+    margin-top: 10px;
 }
 
 .task{

@@ -9,6 +9,14 @@
     <script src="./main.js" defer></script>
 </head>
 <body>
+    <dialog id="project-dialog">
+        <h2>Add New Project</h2>
+        <form action="" id="project-form">
+            <label for="project-title">Title:</label>
+            <input type="text" name="project-title" id="project-title" required>
+            <input type="submit" value="Add Project" id="submit-button">
+        </form>
+    </dialog>
     <dialog id="form-dialog">
         <h2>Add New Task</h2>
         <form action="" id="task-form">
@@ -24,6 +32,9 @@
                 <option value="low">Low</option>
                 <option value="medium">Medium</option>
                 <option value="high">High</option>
+            </select>
+            <label for="project-select">Project:</label>
+            <select id="project-select">
             </select>
             <input type="submit" value="Add Task" id="submit-button">
         </form>
@@ -54,7 +65,8 @@
                     <p>Completed</p>
                 </button>
                 <h2>Projects</h2>
-                <button id="all-tasks-button">
+                <div class="projects-container"></div>
+                <button id="add-project-button">
                     <i class="fa-solid fa-circle-plus"></i>
                     <p>Add Project</p>
                 </button>
