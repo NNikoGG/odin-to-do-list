@@ -1,5 +1,5 @@
 import { myTasks, toggleTaskCompletion } from './tasks.js';
-
+import { myProjects } from './projects.js';
 
 function render(tasks = myTasks, formDialog, taskForm) {
     let taskList = document.querySelector(".task-container");
@@ -12,6 +12,9 @@ function render(tasks = myTasks, formDialog, taskForm) {
         let taskWrapper = document.createElement('div');
         taskWrapper.className = "task";
         taskWrapper.dataset.index = i;
+        if(task.project) {
+          taskWrapper.dataset.projectTitle = task.project.title;
+        }
 
         // Check if the task is completed and add the 'completed' class accordingly
         if (task.completed) {
@@ -26,12 +29,15 @@ function render(tasks = myTasks, formDialog, taskForm) {
         toggleButton.id = `toggle-button-${i}`;
         toggleButton.className = task.completed ? "fa-solid fa-circle-check" : "fa-regular fa-circle";
         toggleButton.dataset.index = i;
+
         toggleButton.addEventListener('click', function(event) {
           event.stopPropagation(); // Prevent the event from bubbling up to the taskWrapper
+          const projectTitle = this.closest('.task').dataset.projectTitle;
           const index = this.dataset.index;
-          toggleTaskCompletion(index);
+          toggleTaskCompletion(projectTitle, index);
           render(tasks, formDialog, taskForm); // Re-render the tasks
-        });      
+        });     
+
         let taskName = document.createElement('p');
         taskName.id = 'task-title';
         taskName.innerText = task.title;
@@ -61,18 +67,24 @@ function render(tasks = myTasks, formDialog, taskForm) {
         taskWrapper.appendChild(editButton);
         taskWrapper.appendChild(removeButton);
 
-        // In the render function in dom.js
-        taskWrapper.addEventListener('click', function() {
-          const index = this.dataset.index;
-          const task = myTasks[index];
-          document.querySelector('#title').value = task.title;
-          document.querySelector('#description').value = task.description;
-          document.querySelector('#date').value = task.date;
-          document.querySelector('#priority-select').value = task.priority;
-          formDialog.showModal();
-
-          // Store the index of the task being edited in the form
-          taskForm.dataset.editingIndex = index;
+        taskWrapper.addEventListener('click', function(event) {
+          const clickedElement = event.target;
+          if (clickedElement.id.startsWith('edit-button-')) {
+            // This condition ensures that the logic is executed only if the task wrapper or one of its direct children (excluding buttons) is clicked
+            const index = clickedElement.dataset.index;
+            const task = tasks[index]; // Use the tasks parameter
+            const formDialog = document.querySelector('#form-dialog');
+            if (task) {
+              document.querySelector('#title').value = task.title;
+              document.querySelector('#description').value = task.description;
+              document.querySelector('#date').value = task.date;
+              document.querySelector('#priority-select').value = task.priority;
+              formDialog.showModal();
+            }
+            else {
+              console.error('Task not found at index:', index);
+            }
+          }
         });
     }
 }
@@ -98,5 +110,42 @@ function renderThisWeekTasks(tasks = myTasks, formDialog, taskForm) {
   render(thisWeekTasks, formDialog, taskForm); // Use the main render function to render this week's tasks
 }
 
+function renderProjects(projects) {
+  const projectsContainer = document.querySelector('.projects-container');
+  const projectSelect = document.querySelector('#project-select');
+  projectsContainer.innerHTML = ''; // Clear existing projects
+  projectSelect.innerHTML = '<p>Select Project</option>'; // Reset the select menu
 
-export { render, renderTodayTasks, renderThisWeekTasks };
+  projects.forEach((project, index) => {
+    // Render project buttons
+    const projectButton = document.createElement('button');
+    projectButton.id = `project-${index}`;
+    projectButton.innerHTML = `
+      <i class="fa-solid fa-list-ul"></i>
+      <p>${project.title}</p>
+    `;
+    projectButton.addEventListener('click', () => {
+      renderTasksByProject(project.title);
+    });
+    projectsContainer.appendChild(projectButton);
+
+    // Add options to the select menu
+    const option = document.createElement('option');
+    option.value = project.title;
+    option.textContent = project.title;
+    projectSelect.appendChild(option);
+  });
+}
+
+
+
+function renderTasksByProject(projectTitle) {
+  const project = myProjects.find(p => p.title === projectTitle);
+  if (project) {
+    render(project.tasks);
+  } else {
+    console.error('Project not found:', projectTitle);
+  }
+}
+
+export { render, renderTodayTasks, renderThisWeekTasks, renderTasksByProject, renderProjects };
