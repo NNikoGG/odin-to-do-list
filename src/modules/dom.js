@@ -1,7 +1,7 @@
 import { myTasks, toggleTaskCompletion } from './tasks.js';
 import { myProjects } from './projects.js';
 
-function render(tasks = myTasks, formDialog, taskForm) {
+function render(tasks = myTasks, formDialog, taskForm, editTaskForm) {
     let taskList = document.querySelector(".task-container");
     taskList.innerHTML = '';
     
@@ -35,7 +35,7 @@ function render(tasks = myTasks, formDialog, taskForm) {
           const projectTitle = this.closest('.task').dataset.projectTitle;
           const index = this.dataset.index;
           toggleTaskCompletion(projectTitle, index);
-          render(tasks, formDialog, taskForm); // Re-render the tasks
+          render(tasks, formDialog, taskForm, editTaskForm); // Re-render the tasks
         });     
 
         let taskName = document.createElement('p');
@@ -54,6 +54,40 @@ function render(tasks = myTasks, formDialog, taskForm) {
         editButton.id = `edit-button-${i}`;
         editButton.className = "fa-solid fa-pen-to-square";
         editButton.dataset.index = i;
+        editButton.addEventListener('click', function(event) {
+          // Prevent the event from triggering the taskWrapper's click event
+          event.stopPropagation();
+          const taskIndex = this.dataset.index;
+          const task = tasks[taskIndex];
+          const editTaskForm = document.querySelector('#edit-task-form');
+          const editTaskDialog = document.querySelector('#edit-task-dialog');
+          if (task) {
+              document.querySelector('#edit-title').value = task.title;
+              document.querySelector('#edit-description').value = task.description;
+              document.querySelector('#edit-date').value = task.date;
+              document.querySelector('#edit-priority-select').value = task.priority;
+              document.querySelector('#edit-project-select').value = task.project.title;
+              // Store the task's index and project title in the form's dataset
+              editTaskForm.dataset.editingIndex = taskIndex;
+              editTaskForm.dataset.projectTitle = task.project.title;
+              // Show the edit task dialog
+              editTaskDialog.showModal();
+              editTaskDialog.addEventListener('click', (e) => {
+                const dialogDimensions = editTaskDialog.getBoundingClientRect();
+                if (
+                    e.clientX < dialogDimensions.left ||
+                    e.clientX > dialogDimensions.right ||
+                    e.clientY < dialogDimensions.top ||
+                    e.clientY > dialogDimensions.bottom
+                ) {
+                    editTaskDialog.close();
+                }
+              });
+          } else {
+              console.error('Task not found at index:', taskIndex);
+          }
+        });
+
         let removeButton = document.createElement('i');
         removeButton.id = `remove-button-${i}`;
         removeButton.className = "fa-solid fa-circle-xmark";
@@ -66,38 +100,18 @@ function render(tasks = myTasks, formDialog, taskForm) {
         taskWrapper.appendChild(taskPriority);
         taskWrapper.appendChild(editButton);
         taskWrapper.appendChild(removeButton);
-
-        taskWrapper.addEventListener('click', function(event) {
-          const clickedElement = event.target;
-          if (clickedElement.id.startsWith('edit-button-')) {
-            // This condition ensures that the logic is executed only if the task wrapper or one of its direct children (excluding buttons) is clicked
-            const index = clickedElement.dataset.index;
-            const task = tasks[index]; // Use the tasks parameter
-            const formDialog = document.querySelector('#form-dialog');
-            if (task) {
-              document.querySelector('#title').value = task.title;
-              document.querySelector('#description').value = task.description;
-              document.querySelector('#date').value = task.date;
-              document.querySelector('#priority-select').value = task.priority;
-              formDialog.showModal();
-            }
-            else {
-              console.error('Task not found at index:', index);
-            }
-          }
-        });
     }
 }
 
-function renderTodayTasks(tasks = myTasks, formDialog, taskForm) {
+function renderTodayTasks(tasks = myTasks, formDialog, taskForm, editTaskForm) {
   let taskList = document.querySelector(".task-container");
   taskList.innerHTML = '';
   const today = new Date().toISOString().slice(0, 10); // Get today's date in YYYY-MM-DD format
   const todayTasks = tasks.filter(task => task.date === today);
-  render(todayTasks, formDialog, taskForm); // Use the main render function to render today's tasks
+  render(todayTasks, formDialog, taskForm, editTaskForm, editTaskDialog); // Use the main render function to render today's tasks
 }
 
-function renderThisWeekTasks(tasks = myTasks, formDialog, taskForm) {
+function renderThisWeekTasks(tasks = myTasks, formDialog, taskForm, editTaskForm) {
   let taskList = document.querySelector(".task-container");
   taskList.innerHTML = '';
   const today = new Date();
@@ -107,15 +121,22 @@ function renderThisWeekTasks(tasks = myTasks, formDialog, taskForm) {
       const taskDate = new Date(task.date);
       return taskDate >= today && taskDate <= sevenDaysFromNow;
   });
-  render(thisWeekTasks, formDialog, taskForm); // Use the main render function to render this week's tasks
+  render(thisWeekTasks, formDialog, taskForm, editTaskForm, editTaskDialog); // Use the main render function to render this week's tasks
 }
 
 function renderProjects(projects) {
   const projectsContainer = document.querySelector('.projects-container');
   const projectSelect = document.querySelector('#project-select');
   projectsContainer.innerHTML = ''; // Clear existing projects
-  projectSelect.innerHTML = '<p>Select Project</option>'; // Reset the select menu
-
+  projectSelect.innerHTML = '<option value="none">Select Project</option>'; // Reset the select menu
+  const editProjectSelect = document.querySelector('#edit-project-select');
+  editProjectSelect.innerHTML = '<option value="none">Select Project</option>';
+  projects.forEach((project) => {
+      const option = document.createElement('option');
+      option.value = project.title;
+      option.textContent = project.title;
+      editProjectSelect.appendChild(option);
+  });
   projects.forEach((project, index) => {
     // Render project buttons
     const projectButton = document.createElement('button');
@@ -136,8 +157,6 @@ function renderProjects(projects) {
     projectSelect.appendChild(option);
   });
 }
-
-
 
 function renderTasksByProject(projectTitle) {
   const project = myProjects.find(p => p.title === projectTitle);

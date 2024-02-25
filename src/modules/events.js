@@ -5,10 +5,12 @@ import { addProject, myProjects, updateProject, Project } from './projects.js';
 const events = () => {
     document.addEventListener('DOMContentLoaded', () => {
         const taskForm = document.querySelector('#task-form');
-        const projectForm = document.querySelector('#project-form')
+        const editTaskForm = document.querySelector('#edit-task-form');
+        const projectForm = document.querySelector('#project-form');
         const addTaskButton = document.querySelector('#add-task-button');
         const formDialog = document.querySelector('#form-dialog');
-        const projectDialog = document.querySelector('#project-dialog')
+        const editTaskDialog = document.querySelector('#edit-task-dialog');
+        const projectDialog = document.querySelector('#project-dialog');
         const allTasksButton = document.querySelector('#all-tasks-button');
         const todayButton = document.querySelector('#today-button');
         const thisWeekButton = document.querySelector('#this-week-button');
@@ -27,7 +29,7 @@ const events = () => {
           
             if (taskForm.dataset.editingIndex !== undefined) {
               const taskIndex = taskForm.dataset.editingIndex;
-              updateTask(projectTitle, taskIndex, title, description, date, priority);
+              updateTask(projectTitle, taskIndex, title, description, date, priority, newProjectTitle);
               delete taskForm.dataset.editingIndex; // Clear the editing index
             } else {
               addTask(title, description, date, priority, projectTitle);
@@ -36,9 +38,30 @@ const events = () => {
             renderTasksByProject(projectTitle);
             taskForm.reset();
             formDialog.close();
-          });
+        });
+        
+        editTaskForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const title = document.querySelector('#edit-title').value;
+            const description = document.querySelector('#edit-description').value;
+            const date = document.querySelector('#edit-date').value;
+            const priority = document.querySelector('#edit-priority-select').value;
+            const projectTitle = editTaskForm.dataset.projectTitle;
+            const newProjectTitle = document.querySelector('#edit-project-select').value;
+            const taskIndex = editTaskForm.dataset.editingIndex;
           
-    
+            updateTask(projectTitle, taskIndex, title, description, date, priority, newProjectTitle);
+            renderTasksByProject(newProjectTitle); // Or render all tasks if needed
+            editTaskForm.reset();
+            editTaskDialog.close();
+            delete editTaskForm.dataset.editingIndex;
+            delete editTaskForm.dataset.projectTitle;
+        });       
+        
+        document.querySelector('#edit-project-select').addEventListener('change', function() {
+            editTaskForm.dataset.projectTitle = this.value;
+        });
+
         projectForm.addEventListener('submit', function(event) {
             event.preventDefault();
             const projectTitle = document.querySelector('#project-title').value;
@@ -59,6 +82,7 @@ const events = () => {
         addTaskButton.addEventListener('click', () => {
             formDialog.showModal();
         });
+
         formDialog.addEventListener('click', (e) => {
             const dialogDimensions = formDialog.getBoundingClientRect();
             if (
@@ -110,7 +134,7 @@ const events = () => {
             
         })
 
-        render(myTasks, formDialog, taskForm);// Initial render
+        render(myTasks, formDialog, taskForm, editTaskForm, editTaskDialog);// Initial render
         renderProjects(myProjects);
     });
 }
