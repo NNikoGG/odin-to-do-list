@@ -1,5 +1,5 @@
 import { addTask, removeTask, updateTask, myTasks } from './tasks.js';
-import { render, renderTodayTasks, renderThisWeekTasks, renderTasksByProject, renderProjects } from './dom.js';
+import { render, getAllTasks, renderTodayTasks, renderThisWeekTasks, renderCompletedTasks, renderTasksByProject, renderProjects } from './dom.js';
 import { addProject, myProjects, updateProject, Project } from './projects.js';
 
 const events = () => {
@@ -111,10 +111,14 @@ const events = () => {
             }
         });
     
-        allTasksButton.addEventListener('click', () => render(myTasks, formDialog, taskForm));
-        todayButton.addEventListener('click', () => renderTodayTasks(myTasks, formDialog, taskForm));
-        thisWeekButton.addEventListener('click', () => renderThisWeekTasks(myTasks, formDialog, taskForm));
-    
+        allTasksButton.addEventListener('click', () => {
+            const allTasks = getAllTasks();
+            render(allTasks, formDialog, taskForm, editTaskForm);
+        });
+        todayButton.addEventListener('click', () => renderTodayTasks(formDialog, taskForm, editTaskForm));
+        thisWeekButton.addEventListener('click', () => renderThisWeekTasks(formDialog, taskForm, editTaskForm));
+        completedTasksButton.addEventListener('click', () => renderCompletedTasks(formDialog, taskForm, editTaskForm));
+        
         document.addEventListener('click', function(event) {
             if (event.target && event.target.id.startsWith('remove-button-')) {
               const projectTitle = event.target.closest('.task').dataset.projectTitle;
@@ -123,16 +127,6 @@ const events = () => {
               render(updatedTasks, formDialog, taskForm); // Re-render with the updated tasks array
             }
           });
-          
-        
-        completedTasksButton.addEventListener('click', () => {
-            const completedTasks = myTasks.filter(task => task.completed);
-            render(completedTasks, formDialog, taskForm);
-        });
-        
-        addProjectButton.addEventListener('click', () => {
-            
-        })
 
         render(myTasks, formDialog, taskForm, editTaskForm, editTaskDialog);// Initial render
         renderProjects(myProjects);

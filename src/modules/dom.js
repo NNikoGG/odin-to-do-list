@@ -103,25 +103,33 @@ function render(tasks = myTasks, formDialog, taskForm, editTaskForm) {
     }
 }
 
-function renderTodayTasks(tasks = myTasks, formDialog, taskForm, editTaskForm) {
-  let taskList = document.querySelector(".task-container");
-  taskList.innerHTML = '';
-  const today = new Date().toISOString().slice(0, 10); // Get today's date in YYYY-MM-DD format
-  const todayTasks = tasks.filter(task => task.date === today);
-  render(todayTasks, formDialog, taskForm, editTaskForm, editTaskDialog); // Use the main render function to render today's tasks
+function getAllTasks() {
+  return myProjects.flatMap(project => project.tasks);
 }
 
-function renderThisWeekTasks(tasks = myTasks, formDialog, taskForm, editTaskForm) {
-  let taskList = document.querySelector(".task-container");
-  taskList.innerHTML = '';
+function renderTodayTasks(formDialog, taskForm, editTaskForm) {
+  const today = new Date().toISOString().slice(0, 10);
+  const allTasks = getAllTasks();
+  const todayTasks = allTasks.filter(task => task.date === today);
+  render(todayTasks, formDialog, taskForm, editTaskForm);
+}
+
+function renderThisWeekTasks(formDialog, taskForm, editTaskForm) {
   const today = new Date();
-  const sevenDaysFromNow = new Date();
-  sevenDaysFromNow.setDate(today.getDate() + 7);
-  const thisWeekTasks = tasks.filter(task => {
-      const taskDate = new Date(task.date);
-      return taskDate >= today && taskDate <= sevenDaysFromNow;
+  const endOfWeek = new Date(today);
+  endOfWeek.setDate(today.getDate() + 6); // Assuming a week is 7 days including today
+  const allTasks = getAllTasks();
+  const thisWeekTasks = allTasks.filter(task => {
+    const taskDate = new Date(task.date);
+    return taskDate >= today && taskDate <= endOfWeek;
   });
-  render(thisWeekTasks, formDialog, taskForm, editTaskForm, editTaskDialog); // Use the main render function to render this week's tasks
+  render(thisWeekTasks, formDialog, taskForm, editTaskForm);
+}
+
+function renderCompletedTasks(formDialog, taskForm, editTaskForm) {
+  const allTasks = getAllTasks();
+  const completedTasks = allTasks.filter(task => task.completed);
+  render(completedTasks, formDialog, taskForm, editTaskForm);
 }
 
 function renderProjects(projects) {
@@ -167,4 +175,4 @@ function renderTasksByProject(projectTitle) {
   }
 }
 
-export { render, renderTodayTasks, renderThisWeekTasks, renderTasksByProject, renderProjects };
+export { render, renderTodayTasks, renderThisWeekTasks, renderCompletedTasks, renderTasksByProject, renderProjects, getAllTasks };
