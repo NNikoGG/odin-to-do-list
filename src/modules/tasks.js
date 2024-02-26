@@ -1,13 +1,14 @@
 import { myProjects } from "./projects";
+import { saveToLocalStorage } from "./storage";
 
 // Task constructor
 class Task {
-  constructor(title, description, date, priority, project) {
+  constructor(title, description, date, priority, projectTitle) {
     this.title = title;
     this.description = description;
     this.date = date;
     this.priority = priority;
-    this.project = project;
+    this.projectTitle = projectTitle;
     this.completed = false;
   }
 }
@@ -21,9 +22,11 @@ function addTask(title, description, date, priority, projectTitle) {
     console.error('Project not found:', projectTitle);
     return;
   }
-  const newTask = new Task(title, description, date, priority, project);
+  const newTask = new Task(title, description, date, priority, projectTitle);
   project.addTask(newTask);
+  saveToLocalStorage();
 }
+
 
 
 function removeTask(projectTitle, taskIndex) {
@@ -33,6 +36,7 @@ function removeTask(projectTitle, taskIndex) {
     return;
   }
   project.tasks.splice(taskIndex, 1);
+  saveToLocalStorage();
   return project.tasks; // Return the updated tasks array
 }
 
@@ -68,7 +72,6 @@ function updateTask(projectTitle, editTaskIndex, title, description, date, prior
     if (newProject) {
       // Remove the task from the current project
       project.tasks.splice(editTaskIndex, 1);
-      console.log('Original project tasks after moving:', project.tasks);
 
       // Add the task to the new project
       newProject.addTask(task);
@@ -78,6 +81,9 @@ function updateTask(projectTitle, editTaskIndex, title, description, date, prior
       console.error('New project not found:', newProjectTitle);
     }
   }
+
+  // Save changes to local storage
+  saveToLocalStorage();
 }
 
 
@@ -93,7 +99,8 @@ function toggleTaskCompletion(projectTitle, taskIndex) {
     return;
   }
   task.completed = !task.completed;
+  saveToLocalStorage();
 }
 
-export { addTask, removeTask, updateTask, toggleTaskCompletion, myTasks };
+export { addTask, removeTask, updateTask, toggleTaskCompletion, myTasks, Task };
 

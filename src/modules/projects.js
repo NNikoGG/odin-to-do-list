@@ -1,3 +1,5 @@
+import { saveToLocalStorage } from "./storage";
+
 // Project constructor
 class Project {
     constructor(title) {
@@ -21,17 +23,20 @@ const myProjects = [];
 function addProject(projectTitle) {
     const newProject = new Project(projectTitle);
     myProjects.push(newProject);
+    saveToLocalStorage();
     return myProjects;
 }
 
 function removeProject(projectIndex) {
     myProjects.splice(projectIndex, 1);
+    saveToLocalStorage();
     return myProjects;
 }
 
 function updateProject(projectIndex, projectTitle) {
     const project = myProjects[projectIndex];
     project.projectTitle = projectTitle;
+    saveToLocalStorage();
 }
 
 export { addProject, removeProject, updateProject, myProjects, Project};

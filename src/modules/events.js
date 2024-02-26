@@ -1,6 +1,7 @@
 import { addTask, removeTask, updateTask, myTasks } from './tasks.js';
 import { render, getAllTasks, renderTodayTasks, renderThisWeekTasks, renderCompletedTasks, renderTasksByProject, renderProjects } from './dom.js';
 import { addProject, myProjects, updateProject, Project } from './projects.js';
+import { saveToLocalStorage, loadFromLocalStorage } from './storage.js';
 
 const events = () => {
     document.addEventListener('DOMContentLoaded', () => {
@@ -16,8 +17,17 @@ const events = () => {
         const thisWeekButton = document.querySelector('#this-week-button');
         const completedTasksButton = document.querySelector('#completed-button');
         const addProjectButton = document.querySelector('#add-project-button');
-        const defaultProject = new Project("Default");
-        myProjects.push(defaultProject);
+
+        // Loading previously saved tasks
+        loadFromLocalStorage();
+
+        // Adding a default project if it doesn't exist
+        const defaultProjectExists = myProjects.some(project => project.title === "Default");
+        if (!defaultProjectExists) {
+            const defaultProject = new Project("Default");
+            myProjects.push(defaultProject);
+            saveToLocalStorage();
+        }
         
         taskForm.addEventListener('submit', function(event) {
             event.preventDefault();
@@ -51,7 +61,7 @@ const events = () => {
             const taskIndex = editTaskForm.dataset.editingIndex;
           
             updateTask(projectTitle, taskIndex, title, description, date, priority, newProjectTitle);
-            renderTasksByProject(newProjectTitle); // Or render all tasks if needed
+            renderTasksByProject(newProjectTitle); 
             editTaskForm.reset();
             editTaskDialog.close();
             delete editTaskForm.dataset.editingIndex;
@@ -128,7 +138,7 @@ const events = () => {
             }
           });
 
-        render(myTasks, formDialog, taskForm, editTaskForm, editTaskDialog);// Initial render
+        render(myTasks, formDialog, taskForm, editTaskForm, editTaskDialog); // Initial render
         renderProjects(myProjects);
     });
 }
