@@ -1,5 +1,6 @@
 import { myTasks, toggleTaskCompletion } from './tasks.js';
 import { myProjects } from './projects.js';
+import { format, isToday, isThisWeek } from 'date-fns';
 
 function render(tasks = myTasks, formDialog, taskForm, editTaskForm) {
     let taskList = document.querySelector(".task-container");
@@ -108,21 +109,14 @@ function getAllTasks() {
 }
 
 function renderTodayTasks(formDialog, taskForm, editTaskForm) {
-  const today = new Date().toISOString().slice(0, 10);
   const allTasks = getAllTasks();
-  const todayTasks = allTasks.filter(task => task.date === today);
+  const todayTasks = allTasks.filter(task => isToday(new Date(task.date)));
   render(todayTasks, formDialog, taskForm, editTaskForm);
 }
 
 function renderThisWeekTasks(formDialog, taskForm, editTaskForm) {
-  const today = new Date();
-  const endOfWeek = new Date(today);
-  endOfWeek.setDate(today.getDate() + 6); // Assuming a week is 7 days including today
   const allTasks = getAllTasks();
-  const thisWeekTasks = allTasks.filter(task => {
-    const taskDate = new Date(task.date);
-    return taskDate >= today && taskDate <= endOfWeek;
-  });
+  const thisWeekTasks = allTasks.filter(task => isThisWeek(new Date(task.date)));
   render(thisWeekTasks, formDialog, taskForm, editTaskForm);
 }
 
