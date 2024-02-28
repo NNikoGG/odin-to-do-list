@@ -170,7 +170,7 @@ main{
     border-bottom: 1px solid black;
     background-color: var(--lightgrey);
     resize: none;
-    padding: 4px 4px;
+    padding: 4px 3px;
 }
 
 #edit-task-form > input:not(#submit-button), #edit-task-form > textarea, #edit-task-form > select {
@@ -210,23 +210,39 @@ main{
     margin-top: 10px;
 }
 
-.task{
+.task {
     font-size: 20px;
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    place-content: center;
-    place-items: center;
+    grid-template-columns: 1fr 1fr 1fr 1fr auto; 
+    justify-items: center;
+    gap: 10px; 
     margin: 14px 4px;
     padding: 4px 20px;
 }
 
-.task > p{
-    display: flex;
-    justify-content: center;
-    margin: 12px;
-    max-width: 200px;
-    max-height: 200px;
+.task > p {
+    margin: 0; 
+    white-space: normal; 
+    overflow-wrap: break-word; 
+    text-align: center; 
+    max-width: 150px;
 }
+
+#task-title {
+    grid-column: 1 / 1;
+    grid-row: 1 / 1;
+    margin-left: 110px;
+    max-width: 210px;
+}
+
+#task-description{
+    max-width: 410px;
+}
+
+.task > i {
+    cursor: pointer;
+}
+
 
 .task.completed {
     text-decoration: line-through;
@@ -249,14 +265,9 @@ main{
 }
 
 [id^="toggle-button-"] {
-    margin-right: 260px;
+    margin-right: 400px;
+    margin-top: 12px;
     grid-column: 1 / 1;
     grid-row: 1 / 1;
     cursor: pointer;
-}
-
-#task-title {
-    grid-column: 1 / 1;
-    grid-row: 1 / 1;
-    margin-left: 110px;
 }
