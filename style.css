@@ -145,8 +145,8 @@ main{
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 520px;
-    height: 520px;
+    width: 500px;
+    height: 500px;
     border: none;
     border-radius: 12px;
     background-color: var(--lightgrey);
@@ -161,7 +161,7 @@ main{
 #task-form, #edit-task-form{
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    padding: 20px 40px;
+    padding: 56px 40px;
     gap: 20px;
 }
 
