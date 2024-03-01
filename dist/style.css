@@ -49,7 +49,7 @@ main{
     margin-top: 20px;
 }
 
-.left-panel button{
+.left-panel > button{
     border: none;
     background-color: var(--lightgrey);
     font-size: 20px;
@@ -274,5 +274,20 @@ main{
 
 .projects-container{
     display: flex;
+    flex-direction: column;
     align-items: center;
+}
+
+[id^="project-button-"] {
+    display: grid;
+    grid-template-columns: auto 300px auto auto;
+    border: none;
+    background-color: var(--lightgrey);
+    align-items: center;
+    text-align: start;
+    font-size: 20px;
+    padding: 4px 24px;
+    margin-bottom: 2px;
+    width: 100%;
+    cursor: pointer;
 }

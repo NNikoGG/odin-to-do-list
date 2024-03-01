@@ -134,7 +134,7 @@ function renderProjects(projects) {
   projects.forEach((project, index) => {
     // Render project buttons
     const projectButton = document.createElement('button');
-    projectButton.id = `project-${index}`;
+    projectButton.id = `project-button-${index}`;
     projectButton.innerHTML = `
       <i class="fa-solid fa-list-ul"></i>
       <p>${project.title}</p>
@@ -154,8 +154,8 @@ function renderProjects(projects) {
     projectRemoveButton.className = "fa-solid fa-circle-xmark";
 
     projectsContainer.appendChild(projectButton);
-    projectsContainer.appendChild(projectEditButton);
-    projectsContainer.appendChild(projectRemoveButton);
+    projectButton.appendChild(projectEditButton);
+    projectButton.appendChild(projectRemoveButton);
 
     // Add options to the select menu
     const option = document.createElement('option');
