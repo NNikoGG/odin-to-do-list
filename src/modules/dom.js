@@ -131,12 +131,6 @@ function renderProjects(projects) {
   projectSelect.innerHTML = '<option value="none">Select Project</option>'; // Reset the select menu
   const editProjectSelect = document.querySelector('#edit-project-select');
   editProjectSelect.innerHTML = '<option value="none">Select Project</option>';
-  projects.forEach((project) => {
-      const option = document.createElement('option');
-      option.value = project.title;
-      option.textContent = project.title;
-      editProjectSelect.appendChild(option);
-  });
   projects.forEach((project, index) => {
     // Render project buttons
     const projectButton = document.createElement('button');
@@ -148,7 +142,20 @@ function renderProjects(projects) {
     projectButton.addEventListener('click', () => {
       renderTasksByProject(project.title);
     });
+
+    const projectEditButton = document.createElement('i');
+    projectEditButton.dataset.index = index;
+    projectEditButton.id = `edit-project-button-${index}`;
+    projectEditButton.className = "fa-solid fa-pen-to-square";
+
+    const projectRemoveButton = document.createElement('i');
+    projectRemoveButton.dataset.index = index;
+    projectRemoveButton.id = `remove-project-button-${index}`;
+    projectRemoveButton.className = "fa-solid fa-circle-xmark";
+
     projectsContainer.appendChild(projectButton);
+    projectsContainer.appendChild(projectEditButton);
+    projectsContainer.appendChild(projectRemoveButton);
 
     // Add options to the select menu
     const option = document.createElement('option');
@@ -157,6 +164,7 @@ function renderProjects(projects) {
     projectSelect.appendChild(option);
   });
 }
+
 
 function renderTasksByProject(projectTitle) {
   const project = myProjects.find(p => p.title === projectTitle);
