@@ -143,19 +143,19 @@ function renderProjects(projects) {
       renderTasksByProject(project.title);
     });
 
-    const projectEditButton = document.createElement('i');
-    projectEditButton.dataset.index = index;
-    projectEditButton.id = `edit-project-button-${index}`;
-    projectEditButton.className = "fa-solid fa-pen-to-square";
+    const editProjectButton = document.createElement('i');
+    editProjectButton.dataset.index = index;
+    editProjectButton.id = `edit-project-button-${index}`;
+    editProjectButton.className = "fa-solid fa-pen-to-square";
 
-    const projectRemoveButton = document.createElement('i');
-    projectRemoveButton.dataset.index = index;
-    projectRemoveButton.id = `remove-project-button-${index}`;
-    projectRemoveButton.className = "fa-solid fa-circle-xmark";
+    const removeProjectButton = document.createElement('i');
+    removeProjectButton.dataset.index = index;
+    removeProjectButton.id = `remove-project-button-${index}`;
+    removeProjectButton.className = "fa-solid fa-circle-xmark";
 
     projectsContainer.appendChild(projectButton);
-    projectButton.appendChild(projectEditButton);
-    projectButton.appendChild(projectRemoveButton);
+    projectButton.appendChild(editProjectButton);
+    projectButton.appendChild(removeProjectButton);
 
     // Add options to the select menu
     const option = document.createElement('option');

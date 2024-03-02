@@ -17,18 +17,19 @@ const events = () => {
         const thisWeekButton = document.querySelector('#this-week-button');
         const completedTasksButton = document.querySelector('#completed-button');
         const addProjectButton = document.querySelector('#add-project-button');
+        const editProjectDialog = document.querySelector('#edit-project-dialog');
+        const editProjectForm = document.querySelector('#edit-project-form');
 
         // Loading previously saved tasks
         loadFromLocalStorage();
 
-        // Adding a default project if it doesn't exist
-        const defaultProjectExists = myProjects.some(project => project.title === "Default");
-        if (!defaultProjectExists) {
+        // Adding a default project if no projects exist
+        if (myProjects.length === 0) {
             const defaultProject = new Project("Default");
             myProjects.push(defaultProject);
             saveToLocalStorage();
         }
-        
+
         taskForm.addEventListener('submit', function(event) {
             event.preventDefault();
             const title = document.querySelector('#title').value;
@@ -89,6 +90,21 @@ const events = () => {
             delete projectForm.dataset.editingIndex;
         });
 
+        editProjectForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const projectIndex = editProjectForm.dataset.projectIndex;
+            const newProjectTitle = document.querySelector('#edit-project-title').value;
+        
+            if (projectIndex !== undefined) {
+                updateProject(projectIndex, newProjectTitle);
+                renderProjects(myProjects);
+                editProjectDialog.close();
+                delete editProjectForm.dataset.projectIndex; // Clear the project index
+            } else {
+                console.error('Project index not found');
+            }
+        });        
+        
         addTaskButton.addEventListener('click', () => {
             formDialog.showModal();
         });
@@ -109,6 +125,7 @@ const events = () => {
         addProjectButton.addEventListener('click', () => {
             projectDialog.showModal();
         });
+
         projectDialog.addEventListener('click', (e) => {
             const dialogDimensions = projectDialog.getBoundingClientRect();
             if (
@@ -135,6 +152,22 @@ const events = () => {
               const taskIndex = event.target.dataset.index;
               const updatedTasks = removeTask(projectTitle, taskIndex);
               render(updatedTasks, formDialog, taskForm); // Re-render with the updated tasks array
+            }
+
+            else if (event.target && event.target.id.startsWith('edit-project-button-')) {
+                editProjectDialog.showModal();
+                editProjectForm.dataset.projectIndex = event.target.dataset.index;
+                editProjectDialog.addEventListener('click', (e) => {
+                    const dialogDimensions = editProjectDialog.getBoundingClientRect();
+                    if (
+                        e.clientX < dialogDimensions.left ||
+                        e.clientX > dialogDimensions.right ||
+                        e.clientY < dialogDimensions.top ||
+                        e.clientY > dialogDimensions.bottom
+                    ) {
+                        editProjectDialog.close();
+                    }
+                });
             }
           });
 
