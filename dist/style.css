@@ -49,7 +49,7 @@ main{
     margin-top: 20px;
 }
 
-.left-panel button{
+.left-panel > button{
     border: none;
     background-color: var(--lightgrey);
     font-size: 20px;
@@ -124,7 +124,7 @@ main{
     font-weight: 600;
 }
 
-#project-dialog{
+#project-dialog, #edit-project-dialog{
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -137,7 +137,7 @@ main{
     padding: 40px;
 }
 
-#project-dialog::backdrop{
+#project-dialog::backdrop, #edit-project-dialog::backdrop{
     background-color: rgba(0, 0, 0, 0.5);
 }
 
@@ -181,7 +181,7 @@ main{
     padding: 4px 4px;
 }
 
-#project-form{
+#project-form, #edit-project-form{
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     padding: 20px 40px;
@@ -196,6 +196,13 @@ main{
     padding: 4px 4px;
 }
 
+#edit-project-form > input:not(#submit-button), #project-form > textarea, #project-form > select {
+    border: none;
+    border-bottom: 1px solid black;
+    background-color: var(--lightgrey);
+    resize: none;
+    padding: 4px 4px;
+}
 
 #submit-button{
     grid-column: 1 / -1;
@@ -213,9 +220,10 @@ main{
 .task {
     font-size: 20px;
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr auto; 
+    grid-template-columns: auto 1fr 1fr 1fr 1fr auto; 
     justify-items: center;
-    gap: 10px; 
+    align-items: start;
+    gap: 20px; 
     margin: 14px 4px;
     padding: 4px 20px;
 }
@@ -224,25 +232,31 @@ main{
     margin: 0; 
     white-space: normal; 
     overflow-wrap: break-word; 
-    text-align: center; 
+    text-align: center;
     max-width: 150px;
 }
 
 #task-title {
-    grid-column: 1 / 1;
+    grid-column: 2 / 2;
     grid-row: 1 / 1;
-    margin-left: 110px;
+    min-width: 210px;
     max-width: 210px;
 }
 
 #task-description{
+    min-width: 410px;
     max-width: 410px;
+}
+
+#task-date{
+    min-width: 120px;
+    max-width: 120px;
 }
 
 .task > i {
     cursor: pointer;
+    margin-top: 6px;
 }
-
 
 .task.completed {
     text-decoration: line-through;
@@ -251,7 +265,7 @@ main{
 
 [id^="edit-button-"] {
     margin-right: 50px;
-    grid-column: 5 / 5;
+    grid-column: 6 / 6;
     grid-row: 1 / 1;
     cursor: pointer;
 }
@@ -259,14 +273,12 @@ main{
 
 [id^="remove-button-"] {
     margin-left: 50px;
-    grid-column: 5 / 5;
+    grid-column: 6 / 6;
     grid-row: 1 / 1;
     cursor: pointer;
 }
 
 [id^="toggle-button-"] {
-    margin-right: 400px;
-    margin-top: 12px;
     grid-column: 1 / 1;
     grid-row: 1 / 1;
     cursor: pointer;
@@ -274,5 +286,20 @@ main{
 
 .projects-container{
     display: flex;
+    flex-direction: column;
     align-items: center;
+}
+
+[id^="project-button-"] {
+    display: grid;
+    grid-template-columns: auto 270px auto auto;
+    border: none;
+    background-color: var(--lightgrey);
+    align-items: center;
+    text-align: start;
+    font-size: 20px;
+    padding: 4px 24px;
+    margin-bottom: 2px;
+    width: 100%;
+    cursor: pointer;
 }

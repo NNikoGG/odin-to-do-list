@@ -33,11 +33,16 @@ function removeProject(projectIndex) {
     return myProjects;
 }
 
-function updateProject(projectIndex, projectTitle) {
-    const project = myProjects[projectIndex];
-    project.projectTitle = projectTitle;
-    saveToLocalStorage();
+function updateProject(projectIndex, newProjectTitle) {
+  const project = myProjects[projectIndex];
+  if (project) {
+      project.title = newProjectTitle; // Update the title property
+      saveToLocalStorage();
+  } else {
+      console.error('Project not found at index:', projectIndex);
+  }
 }
+
 
 export { addProject, removeProject, updateProject, myProjects, Project};
   
