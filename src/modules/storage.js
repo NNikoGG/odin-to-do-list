@@ -1,5 +1,4 @@
 import { myProjects } from './projects.js';
-import { myTasks } from './tasks.js';
 import { Project } from './projects.js';
 import { Task } from './tasks.js';
 

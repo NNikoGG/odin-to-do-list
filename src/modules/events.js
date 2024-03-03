@@ -1,6 +1,6 @@
 import { addTask, removeTask, updateTask, myTasks } from './tasks.js';
 import { render, getAllTasks, renderTodayTasks, renderThisWeekTasks, renderCompletedTasks, renderTasksByProject, renderProjects } from './dom.js';
-import { addProject, myProjects, updateProject, Project } from './projects.js';
+import { addProject, myProjects, updateProject, removeProject, Project } from './projects.js';
 import { saveToLocalStorage, loadFromLocalStorage } from './storage.js';
 
 const events = () => {
@@ -169,6 +169,23 @@ const events = () => {
                     }
                 });
             }
+
+            else if (event.target && event.target.id.startsWith('remove-project-button-')) {
+                const projectIndex = parseInt(event.target.dataset.index);
+                removeProject(projectIndex);
+                renderProjects(myProjects); // Re-render the projects list
+        
+                // Determine the index of the project to render after deletion
+                const newProjectIndex = projectIndex > 0 ? projectIndex - 1 : 0;
+        
+                // Render the tasks of the new project if it exists
+                if (myProjects.length > 0) {
+                    renderTasksByProject(myProjects[newProjectIndex].title);
+                } else {
+                    render([]); // Clear the tasks list if no projects are left
+                }
+            }
+
           });
 
         render(myTasks, formDialog, taskForm, editTaskForm, editTaskDialog); // Initial render
