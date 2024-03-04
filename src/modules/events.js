@@ -5,6 +5,8 @@ import { saveToLocalStorage, loadFromLocalStorage } from './storage.js';
 
 const events = () => {
     document.addEventListener('DOMContentLoaded', () => {
+        const toggleSideBarButton = document.getElementById('toggle-sidebar-button');
+        const leftPanel = document.querySelector('.left-panel');
         const taskForm = document.querySelector('#task-form');
         const editTaskForm = document.querySelector('#edit-task-form');
         const projectForm = document.querySelector('#project-form');
@@ -19,6 +21,7 @@ const events = () => {
         const addProjectButton = document.querySelector('#add-project-button');
         const editProjectDialog = document.querySelector('#edit-project-dialog');
         const editProjectForm = document.querySelector('#edit-project-form');
+        let renderHeading = document.querySelector(".render-heading");
 
         // Loading previously saved tasks
         loadFromLocalStorage();
@@ -29,7 +32,14 @@ const events = () => {
             myProjects.push(defaultProject);
             saveToLocalStorage();
         }
-
+        
+        toggleSideBarButton.addEventListener('click', () => {
+            if (window.innerWidth <= 768) {
+                leftPanel.classList.toggle('sidebar-hidden');
+                document.body.classList.toggle('sidebar-visible');
+            }
+        });
+        
         taskForm.addEventListener('submit', function(event) {
             event.preventDefault();
             const title = document.querySelector('#title').value;
@@ -140,11 +150,21 @@ const events = () => {
     
         allTasksButton.addEventListener('click', () => {
             const allTasks = getAllTasks();
+            renderHeading.textContent = "All Tasks";
             render(allTasks, formDialog, taskForm, editTaskForm);
         });
-        todayButton.addEventListener('click', () => renderTodayTasks(formDialog, taskForm, editTaskForm));
-        thisWeekButton.addEventListener('click', () => renderThisWeekTasks(formDialog, taskForm, editTaskForm));
-        completedTasksButton.addEventListener('click', () => renderCompletedTasks(formDialog, taskForm, editTaskForm));
+        todayButton.addEventListener('click', () => {
+            renderHeading.textContent = "Today's Tasks";
+            renderTodayTasks(formDialog, taskForm, editTaskForm);
+        });
+        thisWeekButton.addEventListener('click', () => {
+            renderHeading.textContent = "This Week's Tasks";
+            renderThisWeekTasks(formDialog, taskForm, editTaskForm)
+        });
+        completedTasksButton.addEventListener('click', () => {
+            renderHeading.textContent = "Completed Tasks";
+            renderCompletedTasks(formDialog, taskForm, editTaskForm);
+        });
         
         document.addEventListener('click', function(event) {
             if (event.target && event.target.id.startsWith('remove-button-')) {

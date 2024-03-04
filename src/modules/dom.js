@@ -135,10 +135,11 @@ function renderProjects(projects) {
     // Render project buttons
     const projectButton = document.createElement('button');
     projectButton.id = `project-button-${index}`;
-    projectButton.innerHTML = `
-      <i class="fa-solid fa-list-ul"></i>
-      <p>${project.title}</p>
-    `;
+    const projectTitlePara = document.createElement('p');
+    projectTitlePara.textContent = project.title;
+    projectTitlePara.className = 'project-title'; 
+    projectButton.innerHTML = `<i class="fa-solid fa-list-ul"></i>`;
+    projectButton.appendChild(projectTitlePara);
     projectButton.addEventListener('click', () => {
       renderTasksByProject(project.title);
     });
@@ -168,7 +169,9 @@ function renderProjects(projects) {
 
 function renderTasksByProject(projectTitle) {
   const project = myProjects.find(p => p.title === projectTitle);
+  let renderHeading = document.querySelector('.render-heading');
   if (project) {
+    renderHeading.textContent = `${projectTitle}`;
     render(project.tasks);
   } else {
     console.error('Project not found:', projectTitle);
